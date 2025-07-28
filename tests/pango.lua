@@ -16,7 +16,7 @@ local check = testsuite.check
 -- Pango overrides testing
 local pango = testsuite.group.new('pango')
 
--- Test originating from https://github.com/pavouk/LuaGObject/issues/68
+-- Test originating from https://github.com/lgi-devs/lgi/issues/68
 function pango.glyphstring()
    local Pango = LuaGObject.Pango
    local pal = Pango.AttrList.new();

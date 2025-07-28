@@ -917,7 +917,7 @@ callable_call (lua_State *L)
 	  }
 	else
 	  /* Normal OUT parameters.  Ideally we don't have to touch
-	     them, but see https://github.com/pavouk/lua_gobject/issues/118 */
+	     them, but see https://github.com/lgi-devs/lgi/issues/118 */
 	  memset (&args[argi], 0, sizeof (args[argi]));
       }
     else if (param->internal_user_data)

@@ -65,7 +65,7 @@ end
 
 -- Pango.Layout:set_attributes() has incorrect transfer-full
 -- annotation on its attrs argument.  Workaround for
--- https://github.com/pavouk/LuaGObject/issues/60
+-- https://github.com/lgi-devs/lgi/issues/60
 if gi.Pango.Layout.methods.set_attributes.args[1].transfer ~= 'none' then
    local _ = Pango.Layout.set_attributes
    Pango.Layout.set_attributes = core.callable.new {

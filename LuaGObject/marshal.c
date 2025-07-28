@@ -525,7 +525,7 @@ marshal_2lua_array (lua_State *L, GITypeInfo *ti, GIDirection dir,
      correctly anyway, this is strange type to use, and moreover this
      is workaround for g-ir-scanner bug which might mark elements of
      uint8 arrays as gconstpointer, thus setting is_pointer=true on
-     it.  See https://github.com/pavouk/lua_gobject/issues/57 */
+     it.  See https://github.com/lgi-devs/lgi/issues/57 */
   if (gi_type_info_get_tag (eti) == GI_TYPE_TAG_UINT8)
     {
       /* UINT8 arrays are marshalled as Lua strings. */

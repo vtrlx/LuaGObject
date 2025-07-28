@@ -240,7 +240,7 @@ end
 
 -- Older versions of gio did not annotate input stream methods as
 -- taking an array.  Apply workaround.
--- https://github.com/pavouk/LuaGObject/issues/59
+-- https://github.com/lgi-devs/lgi/issues/59
 for _, name in pairs { 'read', 'read_all', 'read_async' } do
    local raw_read = Gio.InputStream[name]
    if gi.Gio.InputStream.methods[name].args[1].typeinfo.tag ~= 'array' then
