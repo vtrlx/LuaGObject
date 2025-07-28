@@ -139,7 +139,7 @@ particular order.
 
 ## History
 
-### 0.10.0 (prerelease)
+### 0.10.0 (2025-07-28)
 
 - First version under the name "LuaGObject"
 - Supports PUC-Rio Lua 5.4
