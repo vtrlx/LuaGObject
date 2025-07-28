@@ -52,6 +52,7 @@ function component.get_category(children, xform_value,
 	    return ok and res
 	 end
       end
+
       while #index > 0 do
 	 ei = children[table.remove(index)]
 	 val = xvalue(ei)
@@ -60,13 +61,6 @@ function component.get_category(children, xform_value,
 	    en = not xform_name_reverse and en or xform_name_reverse(en)
 	    if en then category[en] = val end
 	 end
-      end
-
-      -- Load all known indices.
-      for en, idx in pairs(index) do
-	 val = xvalue(children[idx])
-	 en = not xform_name_reverse and en or xform_name_reverse(en)
-	 if en then category[en] = val end
       end
 
       -- Metatable is no longer needed, disconnect it.
@@ -181,7 +175,7 @@ end
 local keyword_dictionary = {
    _end = 'end', _do = 'do', _then = 'then', _elseif = 'elseif', _in = 'in',
    _local = 'local', _function = 'function', _nil = 'nil', _false = 'false',
-   _true = 'true', _and = 'and', _or = 'or', _not = 'not',
+   _true = 'true', _and = 'and', _or = 'or', _not = 'not', _global = 'global',
 }
 
 -- Retrieves (element, category) pair from given componenttable and

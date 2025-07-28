@@ -66,7 +66,7 @@ cairo.version_string = core.callable.new {
 
 -- Load definitions of all boxed records.
 cairo._struct = cairo._struct or {}
-for index, struct in pairs {
+for index, structure in pairs {
    'Context', 'Device', 'Surface', 'Rectangle', 'ScaledFont', 'FontFace',
    'FontOptions', 'Region', 'RectangleInt', 'Path', 'TextExtents',
    'FontExtents', 'Matrix', 'ImageSurface', 'PdfSurface', 'PsSurface',
@@ -76,6 +76,7 @@ for index, struct in pairs {
    MeshPattern = cairo.version_encode(1, 12, 0),
 } do
    local since = 0
+   local struct = structure
    if type(index) == 'string' then
       since = struct
       struct = index

@@ -107,6 +107,7 @@ particular order.
 
 - First version as LuaGObject
 - Support for PUC-Rio Lua 5.4
+- Support for PUC-Rio Lua 5.5
 - Support for Gtk4 and related libraries such as libadwaita (namespaced as Adw)
 - The `Gio.Async` override now supports newer-style async, where functions are
   named `<name>` and `<name>_finish` without any `_async` labels

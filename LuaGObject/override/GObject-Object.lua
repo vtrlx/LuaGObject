@@ -76,7 +76,7 @@ function Object:_construct(gtype, param, owns)
 	 local argtype = self[name]
 	 if gi.isinfo(argtype) and argtype.is_property then
 	    local parameter = core.record.new(parameter_repo)
-	    name = argtype.name
+	    local atname = argtype.name
 	    local value = parameter.value
 
 	    -- Store the name string in some safe Lua place ('safe'
@@ -84,10 +84,10 @@ function Object:_construct(gtype, param, owns)
 	    -- only non-owning pointer to the string, and it could be
 	    -- Lua-GC'ed while still referenced by GParameter
 	    -- instance.
-	    safe[#safe + 1] = name
+	    safe[#safe + 1] = atname
 	    safe[#safe + 1] = value
 
-	    parameter.name = name
+	    parameter.name = atname
 	    local gtype = Type.from_typeinfo(argtype.typeinfo)
 	    Value.init(value, gtype)
 	    local marshaller = Value.find_marshaller(gtype, argtype.typeinfo)

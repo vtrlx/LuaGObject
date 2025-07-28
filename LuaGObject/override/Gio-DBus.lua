@@ -25,10 +25,10 @@ local GLib = LuaGObject.GLib
 -- introspectable constructors.  Work around this limitation by adding
 -- custom LuaGObject constructors which create allocated variants of these
 -- records.
-for _, name in pairs {
+for _, iname in pairs {
    'Annotation', 'Arg' , 'Method', 'Signal', 'Property', 'Interface', 'Node',
 } do
-   name = 'DBus' .. name .. 'Info'
+   local name = 'DBus' .. iname .. 'Info'
    local infotype = Gio[name]
 
    -- Add constructor which properly creates and initializes info.

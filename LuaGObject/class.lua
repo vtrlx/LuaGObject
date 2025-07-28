@@ -241,9 +241,9 @@ end
 
 function class.load_class(namespace, info)
    -- Find parent record, if available.
-   local parent_info, parent = info.parent
-   if parent_info then
-      local ns, name = parent_info.namespace, parent_info.name
+   local parent = info.parent
+   if parent then
+      local ns, name = parent.namespace, parent.name
       if ns ~= namespace._name or name ~= info.name then
 	 parent = core.repo[ns][name]
       end
@@ -271,7 +271,7 @@ function class.load_class(namespace, info)
 	 parent and parent._class or core.repo.GObject.TypeClass
    end
 
-   -- Populate inheritation information (_implements and _parent fields).
+   -- Populate inheritance information (_implements and _parent fields).
    local interfaces, implements = info.interfaces, {}
    for i = 1, #interfaces do
       local iface = interfaces[i]

@@ -13,7 +13,6 @@ local select, type, pairs, setmetatable, error
 local LuaGObject = require 'LuaGObject'
 local Goo = LuaGObject.GooCanvas
 
-
 Goo.Canvas._attribute = {
    root_item = Goo.Canvas.get_root_item,
    root_item_model = Goo.Canvas.get_root_item_model,
