@@ -10,7 +10,7 @@ This library is licensed under an
 license. See the LICENSE file for the full text.
 
 LuaGObject is tested and compatible with PUC-Rio Lua (versions 5.1, 5.2, 5.3,
-and 5.4) as well as LuaJIT2. Other Lua implementations are not officially
+5.4, and 5.5) as well as LuaJIT2. Other Lua implementations are not officially
 supported.
 
 This project is forked from [LGI](http://github.com/lgi-devs/lgi) and shares
@@ -74,6 +74,16 @@ applications developed using LuaGObject.
 
 Older LGI-era examples are in the `samples/` directory. Please note that certain
 examples—especially for Gtk—are quite dated and may no longer be accurate.
+
+### Migrating from LGI
+
+Simply changing any instance of `require('lgi')` to `require('LuaGObject')` in
+source code should suffice for most applications, assuming LuaGObject is
+installed.
+
+For more complex apps and especially for CI pipelines, it should be noted that
+`corelgilua51.{so,dll}` was renamed to `lua_gobject_core.{so,dll}`, and all
+`lgi/` paths have been renamed to `LuaGObject/`.
 
 ## Contributing
 
