@@ -1,8 +1,9 @@
 # LuaGObject
 
 LuaGObject is a library which dynamically generates Lua bindings to libraries
-which support GObject-Introspection such as Adwaita, Gtk, GLib, Gio, Cairo,
-Pango, and many more.
+which support GObject-Introspection such as Adwaita, Gtk, GLib, Gio, Pango, and
+many more. It also generates bindings to Cairo, necessary for certain Gtk
+functionality.
 
 This library is licensed under an
 [MIT-style](http://www.opensource.org/licenses/mit-license.php)
@@ -77,7 +78,7 @@ examples—especially for Gtk—are quite dated and may no longer be accurate.
 ## Credits
 
 LuaGObject would not be possible without the work of Christian Hergert, who
-did the initial work on moving LGI to GIRepository 2.80.
+did the initial work on porting LGI to GIRepository 2.80.
 
 LuaGObject is also built on the work of LGI's developers, listed below in no
 particular order.
@@ -105,18 +106,20 @@ particular order.
 
 ### 0.10.0 (prerelease)
 
-- First version as LuaGObject
-- Support for PUC-Rio Lua 5.4
-- Support for PUC-Rio Lua 5.5
-- Support for Gtk4 and related libraries such as libadwaita (namespaced as Adw)
-- The `Gio.Async` override now supports newer-style async, where functions are
-  named `<name>` and `<name>_finish` without any `_async` labels
-- Enum and flag parameters are now optional, defaulting to a 0 value
-- Now based on GIRepository-2.0, allowing use of LuaGObject on GNOME 49 and
-  later
-- Support for building using Meson
+- First version under the name "LuaGObject"
+- Supports PUC-Rio Lua 5.4
+- Supports PUC-Rio Lua 5.5
+- Compatible with Gtk4 and libadwaita (a.k.a. "Adw")
+- The `Gio.Async` override now supports additional styles of async methods,
+  where functions are named `<name>` and `<name>_finish` without any `_async`
+  labels
+- Enum and flag parameters in functions are now optional, defaulting to a 0
+  value when omitted
+- Core GI code is based on GIRepository-2.0, allowing use of LuaGObject with
+  GNOME 49 and later
+- Can now be built with Meson
 
-### Older Versions
+### Older Pre-Fork Versions
 
 LuaGObject was forked from LGI after it stopped receiving new releases. To see
 the version history of its older versions, see the "History" subheading in LGI's
