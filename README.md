@@ -75,6 +75,31 @@ applications developed using LuaGObject.
 Older LGI-era examples are in the `samples/` directory. Please note that certain
 examples—especially for Gtk—are quite dated and may no longer be accurate.
 
+## Contributing
+
+LuaGObject accepts bug reports and pull requests at
+[its GitHub repository](https://github.com/vtrlx/LuaGObject). Please only open
+an issue for behaviour which you yourself have observed; do not spam it with
+unverified claims. Likewise when submitting a pull request, please only submit
+code which you yourself have written.
+
+Contributions to LuaGObject will not be accepted if they are found to contain
+any changes, in whole or in part, by any product branded as "AI", any LLM, any
+software "agent", or any other machine learning model. Machine leaning models
+include, but are not limited to: ChatGPT, Copilot, Claude, Ollama, and any other
+generative application. If a contribution is found to have been generated in
+whole or in part by a machine learning model, no further contributions from the
+same contributor will be accepted. Contributions are accepted at the sole
+discretion of LuaGObject's maintainer. There is no process to appeal the
+decision to reject a contribution, nor is there a process to appeal the decision
+to reject a contributor.
+
+If you are experiencing any difficulty with understanding LuaGObject's code
+without the use of the aforementioned machine learning models, it is recommended
+to instead get in contact with the maintainer by sending an email to
+`victoria AT vtrlx DOT ca` with a subject line indicating you'd like assistance
+understanding LuaGObject's internals.
+
 ## Credits
 
 LuaGObject would not be possible without the work of Christian Hergert, who
