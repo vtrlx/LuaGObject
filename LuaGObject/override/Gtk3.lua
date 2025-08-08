@@ -19,8 +19,6 @@ local cairo = LuaGObject.cairo
 
 local log = LuaGObject.log.domain('LuaGObject.Gtk3')
 
-assert(Gtk.get_major_version() <= 3)
-
 -- Initialize GTK.
 Gtk.disable_setlocale()
 if not Gtk.init_check() then
@@ -110,7 +108,7 @@ Gdk.Window._attribute.widget = {
    get = Gdk.Window.get_widget,
 }
 
-   -------------------------------- Gtk.Buildable overrides.
+--------------------------------- Gtk.Buildable overrides.
 Gtk.Buildable._attribute = { id = {}, child = {} }
 
 -- Create custom 'id' property, mapped to buildable name.
@@ -164,7 +162,7 @@ function container_property_item_mt:__index(name)
    local pspec = self._container._class:find_child_property(name)
    if not pspec then
       error(("%s: no child property `%s'"):format(
-         self._container.type._name, name:gsub('%-', '_')), 2)
+               self._container.type._name, name:gsub('%-', '_')), 2)
    end
    local value = GObject.Value(pspec.value_type)
    self._container:child_get_property(self._child, name, value)
@@ -175,7 +173,7 @@ function container_property_item_mt:__newindex(name, val)
    local pspec = self._container._class:find_child_property(name)
    if not pspec then
       error(("%s: no child property `%s'"):format(
-         self._container.type._name, name:gsub('%-', '_')), 2)
+               self._container.type._name, name:gsub('%-', '_')), 2)
    end
    local value = GObject.Value(pspec.value_type, val)
    self._container:child_set_property(self._child, name, value)
@@ -184,7 +182,7 @@ local container_property_mt = {}
 function container_property_mt:__index(child)
    if type(child) == 'string' then child = self._container.child[child] end
    return setmetatable({ _container = self._container, _child = child },
-            container_property_item_mt)
+                       container_property_item_mt)
 end
 function Gtk.Container._attribute.property:get()
    return setmetatable({ _container = self }, container_property_mt)
@@ -198,11 +196,11 @@ local container_child_mt = {}
 function container_child_mt:__index(id)
    if type(id) ~= 'string' then return nil end
    local found = (core.object.env(self._container).id == id
-         and self._container)
+               and self._container)
    if not found then
       for _, child in ipairs(self) do
-   found = child.child[id]
-   if found then break end
+         found = child.child[id]
+         if found then break end
       end
    end
    return found or nil
@@ -544,9 +542,9 @@ function Gtk.Assistant:add(child)
       local widget = child[1]
       self:append_page(widget)
       for name, value in pairs(child) do
-	 if type(name) == 'string' then
-	    self['set_page_' .. name](self, widget, value)
-	 end
+         if type(name) == 'string' then
+            self['set_page_' .. name](self, widget, value)
+         end
       end
    else
       self:append_page(widget)

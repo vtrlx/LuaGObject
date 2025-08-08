@@ -6,10 +6,10 @@ local LuaGObject = require 'LuaGObject'
 local Gtk = LuaGObject.Gtk
 
 if Gtk.get_major_version() <= 3 then
-   return require 'LuaGObject.override.Gtk3'
+	return require 'LuaGObject.override.Gtk3'
 elseif Gtk.get_major_version() == 4 then
-   return require 'LuaGObject.override.Gtk4'
+	return require 'LuaGObject.override.Gtk4'
 elseif Gtk.get_major_version() > 4 then
-   -- No override for Gtk5 or later… yet.
-   return
+	-- No override for Gtk5 or later… yet.
+	return
 end

@@ -2,14 +2,11 @@
 -- © 2025 Victoria Lacroix
 -- Licensed under the terms of an MIT license: http://www.opensource.org/licenses/mit-license.php
 
-local LuaGObject = require 'LuaGObject'
-local core = require 'LuaGObject.core'
+local LuaGObject = require "LuaGObject"
 local Gtk = LuaGObject.Gtk
 local Gdk = LuaGObject.Gdk
-local GObject = LuaGObject.GObject
-local cairo = LuaGObject.cairo
 
-local log = LuaGObject.log.domain('LuaGObject.Gtk4')
+local log = LuaGObject.log.domain "LuaGObject.Gtk4"
 
 assert(Gtk.get_major_version() == 4)
 
@@ -29,7 +26,7 @@ Gtk.Allocation = Gdk.Rectangle
 Gtk.Widget._attribute = {
 	width = { get = Gtk.Widget.get_allocated_width },
 	height = { get = Gtk.Widget.get_allocated_height },
-	child = {},
+	children = {},
 }
 
 -- Allow to query a widget's currently-allocated dimensions by indexing .width or .height, and set the requested dimensions by assigning these pseudo-properties.
@@ -41,8 +38,8 @@ function Gtk.Widget._attribute.height:set(height)
 end
 
 -- Access children by index. [1] returns the first child, [2] returns the second, [-1] returns the last, [-2] returns the second-last. If no child exists at the given index, returns nil.
-local widget_child_mt = {}
-function widget_child_mt:__index(key)
+local widget_children_mt = {}
+function widget_children_mt:__index(key)
 	if type(key) ~= "number" then
 		error("%s: cannot access child at non-numeric index", self._widget.type.name)
 	end
@@ -65,85 +62,17 @@ function widget_child_mt:__index(key)
 	return child
 end
 
-function widget_child_mt:__newindex()
-	error("%s: cannot assign child", self._widget.type.name)
+function widget_children_mt:__newindex()
+	error("%s: child widgets cannot be assigned", self._widget.type.name)
 end
 
-function Gtk.Widget._attribute.child:get()
-	return setmetatable({ _widget = self }, widget_child_mt)
+function Gtk.Widget._attribute.children:get()
+	return setmetatable({ _widget = self }, widget_children_mt)
 end
 
--- Gtk.Box overrides --
+-- Constructor container support --
 
-Gtk.Box._attribute = {
-	child = {},
-}
-
-function Gtk.Box:add(widget, props)
-	if type(widget) == "table" or props then
-		error("%s:add(): Gtk4 does not support child properties", self.type.name)
-	end
-	self:append(widget)
-end
-
--- Make Gtk.Box:add() available to constructors
-Gtk.Box._container_add = Gtk.Box.add
-
--- Access a Gtk.Box's children as usual. If assigning a child by number, it will replace the widget at the given index.
-local box_child_mt = { __index = widget_child_mt.__index }
-function box_child_mt:__newindex(key, child)
-	if type(key) ~= "number" or key == 0 then
-		error("%s: cannot write to index %q", self._widget.type.name, key)
-	end
-	local sibling = self[key]
-	if not Gtk.Widget:is_type_of(child) then
-		error("%s: attempt to insert non-widget child", self._widget.type.name)
-	elseif not sibling and key > 0 then
-		self._widget:append(child)
-	elseif not sibling and key < 0 then
-		self._widget:prepend(child)
-	else
-		self._widget:insert_child_after(child, sibling)
-		self._widget:remove(sibling)
-	end
-end
-
-function Gtk.Box._attribute.child:get()
-	return setmetatable({ _widget = self }, box_child_mt)
-end
-
--- Gtk.FlowBox overrides --
-
-function Gtk.FlowBox:add(widget, props)
-	if type(widget) == "table" or props then
-		error("%s:add(): Gtk4 does not support child properties", self.type.name)
-	end
-	self:append(widget)
-end
-
--- Make Gtk.FlowBox:add() available to constructors.
-Gtk.FlowBox._container_add = Gtk.FlowBox.add
-
--- Gtk.ListBox overrides --
-
-function Gtk.ListBox:add(widget, props)
-	if type(widget) == "table" or props then
-		error("%s:add(): Gtk4 does not support child properties", self.type.name)
-	end
-	self:append(widget)
-end
-
--- Make Gtk.ListBox:add() available to constructors.
-Gtk.ListBox._container_add = Gtk.ListBox.add
-
--- Gtk.Stack overrides --
-
-function Gtk.Stack:add(widget, props)
-	if type(widget) == "table" or props then
-		error("%s:add(): Gtk4 does not support child properties", self.type.name)
-	end
-	self:add_child(widget)
-end
-
--- Make Gtk.Stack:add() available to Gtk.Stack's constructor.
-Gtk.Stack._container_add = Gtk.Stack.add
+Gtk.Box._container_add = Gtk.Box._method.append
+Gtk.FlowBox._container_add = Gtk.FlowBox._method.append
+Gtk.ListBox._container_add = Gtk.ListBox._method.append
+Gtk.Stack._container_add = Gtk.Stack._method.add_child
