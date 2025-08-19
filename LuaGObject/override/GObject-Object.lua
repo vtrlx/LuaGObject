@@ -279,7 +279,8 @@ function Object:_access_property(object, prop, ...)
       local gtype = Type.from_typeinfo(typeinfo)
       local marshaller = Value.find_marshaller(gtype, typeinfo,
                                                prop.transfer)
-      return marshal_property(object, prop.name, prop.flags,
+      return marshal_property(object, prop.name,
+                              repo.GObject.ParamFlags[prop.flags],
                               gtype, marshaller, ...)
    else
       -- pspec-based property

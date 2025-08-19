@@ -63,6 +63,13 @@ function component.get_category(children, xform_value,
 	 end
       end
 
+      -- The non-numeric indices still need to be iterated on, if any exist.
+      for en, idx in pairs(index) do
+         val = xvalue(children[idx])
+         local name = not xform_name_reverse and en or xform_name_reverse(en)
+         if name then category[name] = val end
+      end
+
       -- Metatable is no longer needed, disconnect it.
       return setmetatable(category, nil)
    end

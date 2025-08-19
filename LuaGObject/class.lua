@@ -220,7 +220,6 @@ end
 function class.load_interface(namespace, info)
    -- Load all components of the interface.
    local interface = component.create(info, class.interface_mt)
-   interface._name = info.name
    interface._property = load_properties(info)
    interface._method = component.get_category(info.methods, load_method)
    interface._signal = component.get_category(
@@ -241,9 +240,9 @@ end
 
 function class.load_class(namespace, info)
    -- Find parent record, if available.
-   local parent = info.parent
-   if parent then
-      local ns, name = parent.namespace, parent.name
+   local parent_info, parent = info.parent
+   if parent_info then
+      local ns, name = parent_info.namespace, parent_info.name
       if ns ~= namespace._name or name ~= info.name then
 	 parent = core.repo[ns][name]
       end

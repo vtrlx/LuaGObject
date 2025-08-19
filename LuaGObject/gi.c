@@ -464,19 +464,8 @@ info_index (lua_State *L)
     {
       if (strcmp (prop, "flags") == 0)
 	{
-	  GParamFlags flags = gi_property_info_get_flags (GI_PROPERTY_INFO (*info));
-          lua_newtable (L);
-#define H(n1)                                           \
-	  if ((flags & G_PARAM_ ## n1) != 0)            \
-	    {				        	\
-	      lua_pushboolean (L, 1);		        \
-	      lua_setfield (L, -2, #n1);                \
-	    }
-	  H(READABLE)
-	  H(WRITABLE)
-	  H(CONSTRUCT)
-#undef H
-	  return 1;
+	  lua_pushinteger (L, gi_property_info_get_flags (GI_PROPERTY_INFO (*info)));
+          return 1;
 	}
       else if (strcmp (prop, "transfer") == 0)
 	return

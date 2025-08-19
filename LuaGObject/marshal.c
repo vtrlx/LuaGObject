@@ -184,16 +184,13 @@ array_get_or_set_length (GITypeInfo *ti, gssize *get_length, gssize set_length,
 
       if (GI_IS_FUNCTION_INFO (ci) || GI_IS_CALLBACK_INFO (ci))
 	{
-	  GIArgInfo ai;
+	  GIArgInfo *ai;
 
 	  if (param >= gi_callable_info_get_n_args (GI_CALLABLE_INFO (ci)))
 	    return;
-	  gi_callable_info_load_arg (GI_CALLABLE_INFO (ci), param, &ai);
-	  eti = gi_arg_info_get_type_info (&ai);
-          /* Without explicitly incrementing the ref count on eti, it will be
-             made into garbage when clearing ai. */
-          gi_base_info_ref (eti);
-	  if (gi_arg_info_get_direction (&ai) == GI_DIRECTION_IN)
+	  ai = gi_callable_info_get_arg (GI_CALLABLE_INFO (ci), param);
+	  eti = gi_arg_info_get_type_info (ai);
+	  if (gi_arg_info_get_direction (ai) == GI_DIRECTION_IN)
 	    /* For input parameters, value is directly pointed to by args
 	       table element. */
 	    val = (GIArgument *) ((void **) args)[param];
@@ -201,8 +198,7 @@ array_get_or_set_length (GITypeInfo *ti, gssize *get_length, gssize set_length,
 	    /* For output arguments, args table element points to pointer
 	       to value. */
 	    val = *(GIArgument **) ((void **) args)[param];
-
-          gi_base_info_clear (&ai);
+          gi_base_info_unref (ai);
 	}
       else if (GI_IS_STRUCT_INFO (ci) || GI_IS_UNION_INFO (ci))
 	{
@@ -507,9 +503,8 @@ marshal_2lua_array (lua_State *L, GITypeInfo *ti, GIDirection dir,
 	{
           if (!gi_type_info_get_array_fixed_size (ti, (gsize *)&len))
 	    /* Length of the array is dynamic, get it from other
-	       argument. If the size isn't known ahead of time (it's -1),
-               and it isn't zero-terminated, assume 1. */
-	    len = size < 0 ? 1 : size;
+	       argument. */
+	    len = size;
 	}
     }
 
