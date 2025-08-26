@@ -503,8 +503,9 @@ marshal_2lua_array (lua_State *L, GITypeInfo *ti, GIDirection dir,
 	{
           if (!gi_type_info_get_array_fixed_size (ti, (gsize *)&len))
 	    /* Length of the array is dynamic, get it from other
-	       argument. */
-	    len = size;
+	       argument. If the size isn't known ahead of time (it's -1),
+               and it isn't zero-terminated, assume 1. */
+	    len = size < 0 ? 1 : size;
 	}
     }
 
