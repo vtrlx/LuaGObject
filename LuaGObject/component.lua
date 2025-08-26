@@ -314,7 +314,7 @@ function component.create(info, mt, name)
    local gtype
    if core.gi.isinfo(info) then
       gtype = info.gtype
-      name = info.fullname
+      name = info.name
    else
       gtype = info and core.gtype(info)
    end
