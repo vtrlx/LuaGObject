@@ -16,9 +16,12 @@ Adw.PreferencesGroup._container_add = Adw.PreferencesGroup._method.add
 Adw.ExpanderRow._container_add = Adw.ExpanderRow.add_row
 
 -- These classes were introduced in later versions of Adw, and thus may not always be available.
+-- Introduced in Adw 1.7
 if Adw.WrapBox then
 	Adw.WrapBox._container_add = Adw.WrapBox._method.append
 end
+
+--Introduced in Adw 1.8
 if Adw.ShortcutsDialog then
 	Adw.ShortcutsDialog._container_add = Adw.ShortcutsDialog.add
 end
@@ -34,14 +37,14 @@ Adw.ActionRow._attribute = {
 }
 
 function Adw.ActionRow._attribute.prefixes:get()
-	error("%s: Cannot read prefixes; attribute is write-only.", self.type.name)
+	error("%s: Cannot read prefixes; attribute is write-only.", self._type.name)
 end
 function Adw.ActionRow._attribute.prefixes:set(value)
 	if Gtk.Widget:is_type_of(value) then
 		value = { value }
 	end
 	if type(value) ~= "table" then
-		error("%s: Can only write table or Gtk.Widget to add_prefixes.", self.type.name)
+		error("%s: Can only write table or Gtk.Widget to add_prefixes.", self._type.name)
 	end
 	for _, c in ipairs(value) do
 		self:add_prefix(c)
@@ -49,14 +52,14 @@ function Adw.ActionRow._attribute.prefixes:set(value)
 end
 
 function Adw.ActionRow._attribute.suffixes:get()
-	error("%s: Cannot read suffixes; attribute is write-only.", self.type.name)
+	error("%s: Cannot read suffixes; attribute is write-only.", self._type.name)
 end
 function Adw.ActionRow._attribute.suffixes:set(value)
 	if Gtk.Widget:is_type_of(value) then
 		value = { value }
 	end
 	if type(value) ~= "table" then
-		error("%s: Can only write table or Widget to add_suffixes.", self.type.name)
+		error("%s: Can only write table or Widget to add_suffixes.", self._type.name)
 	end
 	for _, v in ipairs(value) do
 		self:add_suffix(v)
@@ -71,14 +74,14 @@ Adw.HeaderBar._attribute = {
 }
 
 function Adw.HeaderBar._attribute.end_packs:get()
-	error("%s: Cannot read end_packs; attribute is write-only.", self.type.name)
+	error("%s: Cannot read end_packs; attribute is write-only.", self._type.name)
 end
 function Adw.HeaderBar._attribute.end_packs:set(value)
 	if Gtk.Widget:is_type_of(value) then
 		value = { value }
 	end
 	if type(value) ~= "table" then
-		error("%s: Can only write table or Widget to end_packs.", self.type.name)
+		error("%s: Can only write table or Widget to end_packs.", self._type.name)
 	end
 	for _, v in ipairs(value) do
 		self:pack_end(v)
@@ -86,14 +89,14 @@ function Adw.HeaderBar._attribute.end_packs:set(value)
 end
 
 function Adw.HeaderBar._attribute.start_packs:get()
-	error("%s: Cannot read start_packs; attribute is write-only.", self.type.name)
+	error("%s: Cannot read start_packs; attribute is write-only.", self._type.name)
 end
 function Adw.HeaderBar._attribute.start_packs:set(value)
-	if Gtk.Widget:is_type_of(widget) then
+	if Gtk.Widget:is_type_of(value) then
 		value = { value }
 	end
 	if type(value) ~= "table" then
-		error("%s: Can only write table or Widget to start_packs.", self.type.name)
+		error("%s: Can only write table or Widget to start_packs.", self._type.name)
 	end
 	for _, v in ipairs(value) do
 		self:pack_start(v)
@@ -102,7 +105,7 @@ end
 
 -- Adw.ToolbarView overrides --
 
--- Adw.ToolbarView was introduced in Adw 1.4, and may not be available.
+-- Adw.ToolbarView was introduced in Adw 1.4. It should only be overridden if it exists.
 if Adw.ToolbarView then
 	Adw.ToolbarView._attribute = {
 		bottom_bars = {},
@@ -110,14 +113,14 @@ if Adw.ToolbarView then
 	}
 
 	function Adw.ToolbarView._attribute.bottom_bars:get()
-		error("%s: Cannot read bottom_bars; attribute is write-only.", self.type.name)
+		error("%s: Cannot read bottom_bars; attribute is write-only.", self._type.name)
 	end
 	function Adw.ToolbarView._attribute.bottom_bars:set(value)
 		if Gtk.Widget:is_type_of(value) then
 			value = { value }
 		end
 		if type(value) ~= "table" then
-			error("%s: Can only write table or Gtk.Widget to add_bottom_bars.", self.type.name)
+			error("%s: Can only write table or Gtk.Widget to add_bottom_bars.", self._type.name)
 		end
 		for _, v in ipairs(values) do
 			self:add_bottom_bar(v)
@@ -125,14 +128,14 @@ if Adw.ToolbarView then
 	end
 
 	function Adw.ToolbarView._attribute.top_bars:get()
-		error("%s: Cannot read top_bars; attribute is write-only.", self.type.name)
+		error("%s: Cannot read top_bars; attribute is write-only.", self._type.name)
 	end
 	function Adw.ToolbarView._attribute.top_bars:set(value)
 		if Gtk.Widget:is_type_of(value) then
 			value = { value }
 		end
 		if type(value) ~= "table" then
-			error("%s: Can only write table or Gtk.Widget to add_top_bars.", self.type.name)
+			error("%s: Can only write table or Gtk.Widget to add_top_bars.", self._type.name)
 		end
 		for _, v in ipairs(value) do
 			self:add_top_bar(v)

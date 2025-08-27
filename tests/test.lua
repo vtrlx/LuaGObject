@@ -115,6 +115,7 @@ for _, sourcefile in ipairs {
    'variant.lua',
    'dbus.lua',
    'gtk.lua',
+   'adw.lua',
    'cairo.lua',
    'pango.lua',
    'gio.lua',

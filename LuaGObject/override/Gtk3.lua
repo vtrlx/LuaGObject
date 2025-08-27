@@ -19,6 +19,8 @@ local cairo = LuaGObject.cairo
 
 local log = LuaGObject.log.domain('LuaGObject.Gtk3')
 
+assert(Gtk.get_major_version() <= 3)
+
 -- Initialize GTK.
 Gtk.disable_setlocale()
 if not Gtk.init_check() then
