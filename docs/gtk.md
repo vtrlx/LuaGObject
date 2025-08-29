@@ -49,6 +49,8 @@ GTK 4 gets rid of the Container class, making it somewhat more complicated to in
 - `Gtk.FlowBox`
 - `Gtk.ListBox`
 - `Gtk.Stack`
+- `Gtk.Notebook`
+- `Gtk.Grid`
 
 An example of instantiating a `Gtk.Box` with its own children:
 
@@ -61,6 +63,48 @@ An example of instantiating a `Gtk.Box` with its own children:
 	}
 
 This creates a `Gtk.Box` containing four children. Note that `box`'s `orientation` property was set to `Gtk.Orientation.VERTICAL` as well in the same constructor. For specific container widgets, this creates a programmer experience not unlike using `Gtk.Builder` for creating widget hierarchies, but with a syntax ressembling Blueprint.
+
+### `Gtk.Notebook` Children
+
+To construct an instance of `Gtk.Notebook` with children, special consideration must be undertaken. Adding children to this widget requires a label to be provided. Additionally, an optional menu may be provided as well. To do this, each child in the constructor must be a table with a GTK widget in the first slot, a `.tab_label` item with a child widget, and optionally a `.menu_label` item with a child widget.
+
+	local notebook = Gtk.Notebook {
+		{
+			Gtk.TextView(),
+			tab_label = Gtk.Label { label = "Tab 1" },
+		},
+		{
+			Gtk.ScrolledWindow(),
+			tab_label = Gtk.Label { label = "Tab 2" },
+			menu_label = Gtk.MenuButton(),
+		},
+	}
+
+This example creates a `Gtk.Notebook` containing two tabs, labelled "Tab 1" and "Tab 2". Tab 2 also has a menu widget.
+
+For convenience, this override also allows a child's `.tab_label` item to be a string. In this case, LuaGObject automatically wraps this into a `Gtk.Label` with the `.label` property set the given value. Thus, the previous example can be rewritten as:
+
+	local notebook = Gtk.Notebook {
+		{ Gtk.TextView(), tab_label = "Tab 1" },
+		{
+			Gtk.ScrolledWindow(),
+			tab_label = "Tab 2",
+			menu = Gtk.MenuButton(),
+		},
+	}
+
+### `Gtk.Grid` Children
+
+Like with `Gtk.Notebook`, the `Gtk.Grid` class also requires special consideration when adding children in its constructor. Each child added this way must be a table containing a widget in the array part, as well as integer values for `.column` and `.row`. A `.width` and/or `.height` may optionally be specified, and both will default to 1 if not given.
+
+	local grid = Gtk.Grid {
+		{ Gtk.Button.new_with_label "1, 1", column = 1, row = 1 },
+		{ Gtk.Button.new_with_label "2, 1", column = 2, row = 1 },
+		{
+			Gtk.Button.new_with_label "1–2, 2 (spans two columns)",
+			column = 1, row = 2, width = 2,
+		},
+	}
 
 ### Advanced Example: Removing Children
 
@@ -89,6 +133,7 @@ Certain classes only exist in later versions of libadwaita. These version requir
 
 Like `Gtk.Box` and related classes, LuaGObject overrides certain Adw classes to allow specifying children to be added in constructor tables. The following widgets are supported:
 
+- `Adw.Carousel`
 - `Adw.PreferencesDialog`
 	- Must only contain `Adw.PreferencesPage` children.
 - `Adw.PreferencesPage`
@@ -100,6 +145,8 @@ Like `Gtk.Box` and related classes, LuaGObject overrides certain Adw classes to 
 	- Must only contain `Adw.ShortcutsSection` children.
 - `Adw.ShortcutsSection` (Adw 1.8 and later)
 	- Must only contain `Adw.ShortcutsItem` children.
+- `Adw.TabView`
+- `Adw.ViewStack`
 
 As with GTK 4, these constructors may be nested. Here is a more complex example involving the creation of a preferences page:
 
@@ -116,6 +163,33 @@ As with GTK 4, these constructors may be nested. Here is a more complex example 
 				title = "SpinRow",
 				adjustment = Gtk.Adjustment.new(0, 0, 100, 1, 10, 0),
 			},
+		},
+	}
+
+### `Adw.TabView` Constructor Children
+
+Like with other container widgets, `Adw.TabView` can accept an arbitrary number of child widgets in the constructor table's array part. Additionally, it can also accept an arbitrary number of tables, each containing one widget in the array part and optionally also a value at `.pinned`, which will add the child widget as a pinned tab, and `.title` which is a string to be used as the tab's title. This example illustrates multiple ways to add children to a Tab View:
+
+	local tabview = Adw.TabView {
+		Gtk.TextView(), -- Title will be left blank
+		{ Gtk.TextView(), title = "Tab 2" },
+		{ Gtk.TextView(), title = "Tab 3", pinned = true },
+	}
+
+### `Adw.ViewStack` Constructor Children
+
+As with `Adw.TabView`, `Adw.ViewStack` children may be included in the constructor table directly, or wrapped in tables with certain additional members. These are `.name`, `.title`, and `.icon_name`. For `.title`, a `.name` must be set or it won't be used. For `.icon_name`, both a `.title` and a `.name` must be set as well. For a complete example of all ways to add children to `Adw.ViewStack` in the constructor:
+
+	local viewstack = Adw.ViewStack {
+		Gtk.TextView(),
+		{ Gtk.TextView() },
+		{ Gtk.TextView(), name = "Name" },
+		{ Gtk.TextView(), name = "Name", title = "Title" },
+		{
+			Gtk.TextView(),
+			name = "Name",
+			title = "Title",
+			icon_name = "icon-name",
 		},
 	}
 

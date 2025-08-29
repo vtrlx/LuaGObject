@@ -10,6 +10,7 @@ local log = LuaGObject.log.domain "LuaGObject.Adw"
 
 -- Constructor container support --
 
+Adw.Carousel._container_add = Adw.Carousel.append
 Adw.PreferencesDialog._container_add = Adw.PreferencesDialog._method.add
 Adw.PreferencesPage._container_add = Adw.PreferencesPage._method.add
 Adw.PreferencesGroup._container_add = Adw.PreferencesGroup._method.add
@@ -27,6 +28,52 @@ if Adw.ShortcutsDialog then
 end
 if Adw.ShortcutsSection then
 	Adw.ShortcutsSection._container_add = Adw.ShortcutsSection.add
+end
+
+-- Adw.TabView overrides --
+
+function Adw.TabView:_container_add(child)
+	if Gtk.Widget:is_type_of(child) then
+		child = { child }
+	end
+	if type(child) ~= "table" then
+		error("%s: Child must be table or GTK Widget", self._type.name)
+	end
+	if #child ~= 1 or not Gtk.Widget:is_type_of(child[1]) then
+		error("%s: Child must contain only a single GTK Widget.", self._type.name)
+	end
+	local page
+	if child.pinned then
+		page = self:append_pinned(child[1])
+	else
+		page = self:append(child[1])
+	end
+	if type(child.title) == "string" then
+		page.title = child.title
+	end
+end
+
+-- Adw.ViewStack overrides --
+
+function Adw.ViewStack:_container_add(child)
+	if Gtk.Widget:is_type_of(child) then
+		child = { child }
+	end
+	if type(child) ~= "table" then
+		error("%s: Child must be table or GTK Widget", self._type.name)
+	end
+	if #child ~= 1 or not Gtk.Widget:is_type_of(child[1]) then
+		error("%s: Child table must contain one GTK Widget.", self._type.name)
+	end
+	if type(child.icon_name) == "string" and type(child.title) == "string" and type(child.name) == "string" then
+		self:add_titled_with_icon(child[1], child.name, child.title, child.icon_name)
+	elseif type(child.title) == "string" and type(child.name) == "string" then
+		self:add_titled(child[1], child.name, child.title)
+	elseif type(child.name) == "string" then
+		self:add_named(child[1], child.name)
+	else
+		self:add(child[1])
+	end
 end
 
 -- Adw.ActionRow overrides --

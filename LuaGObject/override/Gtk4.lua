@@ -70,9 +70,49 @@ function Gtk.Widget._attribute.children:get()
 	return setmetatable({ _widget = self }, widget_children_mt)
 end
 
--- Constructor container support --
+-- Simple container support --
 
 Gtk.Box._container_add = Gtk.Box._method.append
 Gtk.FlowBox._container_add = Gtk.FlowBox._method.append
 Gtk.ListBox._container_add = Gtk.ListBox._method.append
 Gtk.Stack._container_add = Gtk.Stack._method.add_child
+
+-- Gtk.Grid container support --
+
+function Gtk.Grid:_container_add(child)
+	if type(child) ~= "table" then
+		error("%s: Cannot add non-table child from constructor.", self._type.name)
+	end
+	if type(child.column) ~= "number" or type(child.row) ~= "number" then
+		error("%s: Child column and/or row are unspecified.", self._type.name)
+	end
+	if #child ~= 1 or not Gtk.Widget:is_type_of(child[1]) then
+		error("%s: Child table must contain only one widget.", self._type.name)
+	end
+	local column = child.column
+	local row = child.row
+	local width = child.width or 1
+	local height = child.height or 1
+	self:attach(child[1], column, row, width, height)
+end
+
+-- Gtk.Notebook container support --
+
+function Gtk.Notebook:_container_add(child)
+	if type(child) ~= "table" then
+		error("%s: Cannot add non-table child from constructor.", self._type.name)
+	end
+	if type(child.tab_label) == "string" then
+		child.tab_label = Gtk.Label { label = child.tab_label }
+	elseif Gtk.Widget:is_type_of(child.tab_label) then
+		error("%s: Child label is not a GTK Widget.", self._type.name)
+	end
+	if #child ~= 1 or not Gtk.Widget:is_type_of(child[1]) then
+		error("%s: Child table must have only one widget.", self._type.name)
+	end
+	if Gtk.Widget:is_type_of(child.menu_label) then
+		self:append_page_menu(child[1], child.tab_label, child.menu_label)
+	else
+		self:append_page(child[1], child.tab_label)
+	end
+end
