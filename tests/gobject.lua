@@ -25,18 +25,16 @@ function gobject.env_base()
    check(next(core.object.env(obj)) == nil)
 end
 
-if LuaGObject.Gtk.Window._method.add then
-  function gobject.env_persist()
-     local Gtk = LuaGObject.Gtk
-     local window = Gtk.Window()
-     local label = Gtk.Label()
-     local env = core.object.env(label)
-     window:_method_add(label)
-     label = nil
-     collectgarbage()
-     label = window:get_child()
-     check(env == core.object.env(label))
-  end
+function gobject.env_persist()
+   local Gtk = LuaGObject.Gtk
+   local window = Gtk.Window()
+   local label = Gtk.Label()
+   local env = core.object.env(label)
+   window.child = label
+   label = nil
+   collectgarbage()
+   label = window.child
+   check(env == core.object.env(label))
 end
 
 function gobject.object_new()

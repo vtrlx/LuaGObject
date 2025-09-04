@@ -9,7 +9,7 @@
 VERSION = 0.10.0
 MAKE ?= make
 
-ROCK = LuaGObject-$(VERSION)-1.rockspec
+ROCK = luagobject-$(VERSION)-1.rockspec
 
 .PHONY : rock all clean install check
 
