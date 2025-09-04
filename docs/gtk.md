@@ -64,7 +64,7 @@ An example of instantiating a `Gtk.Box` with its own children:
 
 This creates a `Gtk.Box` containing four children. Note that `box`'s `orientation` property was set to `Gtk.Orientation.VERTICAL` as well in the same constructor. For specific container widgets, this creates a programmer experience not unlike using `Gtk.Builder` for creating widget hierarchies, but with a syntax ressembling Blueprint.
 
-### `Gtk.Notebook` Children
+### `Gtk.Notebook` Constructor Children
 
 To construct an instance of `Gtk.Notebook` with children, special consideration must be undertaken. Adding children to this widget requires a label to be provided. Additionally, an optional menu may be provided as well. To do this, each child in the constructor must be a table with a GTK widget in the first slot, a `.tab_label` item with a child widget, and optionally a `.menu_label` item with a child widget.
 
@@ -89,11 +89,11 @@ For convenience, this override also allows a child's `.tab_label` item to be a s
 		{
 			Gtk.ScrolledWindow(),
 			tab_label = "Tab 2",
-			menu = Gtk.MenuButton(),
+			menu_label = Gtk.MenuButton(),
 		},
 	}
 
-### `Gtk.Grid` Children
+### `Gtk.Grid` Constructor Children
 
 Like with `Gtk.Notebook`, the `Gtk.Grid` class also requires special consideration when adding children in its constructor. Each child added this way must be a table containing a widget in the array part, as well as integer values for `.column` and `.row`. A `.width` and/or `.height` may optionally be specified, and both will default to 1 if not given.
 

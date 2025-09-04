@@ -1,6 +1,6 @@
 # LuaGObject
 
-LuaGObject is a library which dynamically generates Lua bindings to libraries which support GObject-Introspection such as Adwaita, Gtk, GLib, Gio, Pango, and many more. It also generates bindings to Cairo, necessary for certain Gtk functionality.
+LuaGObject is a library which dynamically generates Lua bindings to libraries which support GObject-Introspection such as Adwaita, GTK, GLib, Gio, Pango, and many more. It also generates bindings to Cairo, necessary for certain Gtk functionality.
 
 This library is licensed under an [MIT-style](http://www.opensource.org/licenses/mit-license.php) license. See the LICENSE file for the full text.
 
@@ -84,9 +84,9 @@ LuaGObject is also built on the work of LGI's developers, listed below in no par
 
 ## History
 
-### Upcoming
+### 0.10.1 (2025-09-04)
 
-- New overrides for GTK 4 and libadwaita allowing for specification of child widgets inside constructors
+- Can now add children directly to many GTK 4 and Adwaita widgets when constructing them
 
 ### 0.10.0 (2025-07-28)
 
