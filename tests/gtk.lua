@@ -2,8 +2,6 @@
 -- Copyright © 2025 Victoria Lacroix
 -- Licensed under the terms of an MIT license. See http://www.opensource.org/licenses/mit-license.php for more information.
 
-local io = require "io"
-local os = require "os"
 local LuaGObject = require "LuaGObject"
 
 if LuaGObject.Gtk.get_major_version() ~= 4 then
@@ -97,4 +95,42 @@ function gtk.stack_container()
 	check(stack.children[1] == label1)
 	check(stack.children[2] == label2)
 	check(stack.children[3] == label3)
+end
+
+function gtk.grid_container()
+	local Gtk = LuaGObject.Gtk
+	local label1 = Gtk.Label()
+	local label2 = Gtk.Label()
+	local label3 = Gtk.Label()
+	local grid = Gtk.Grid {
+		{ label1, column = 1, row = 1 },
+		{ label2, column = 3, row = 2 },
+		{ label3, column = 2, row = 3 },
+	}
+	check(grid:get_child_at(1, 1) == label1)
+	check(grid:get_child_at(3, 2) == label2)
+	check(grid:get_child_at(2, 3) == label3)
+	check(not grid:get_child_at(2, 2))
+end
+
+function gtk.notebook_container()
+	local Gtk = LuaGObject.Gtk
+	local label1 = Gtk.Label()
+	local label2 = Gtk.Label()
+	local label3 = Gtk.Label()
+	local notebook = Gtk.Notebook {
+		{ label1, tab_label = "Tab 1" },
+		{
+			label2,
+			tab_label = Gtk.Label { label = "Tab 2" },
+		},
+		{
+			label3,
+			tab_label = Gtk.Label { label = "Tab 3" },
+			menu_label = Gtk.MenuButton(),
+		},
+	}
+	check(notebook:get_nth_page(0) == label1)
+	check(notebook:get_nth_page(1) == label2)
+	check(notebook:get_nth_page(2) == label3)
 end

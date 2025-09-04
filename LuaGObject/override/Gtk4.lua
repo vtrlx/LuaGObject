@@ -104,7 +104,7 @@ function Gtk.Notebook:_container_add(child)
 	end
 	if type(child.tab_label) == "string" then
 		child.tab_label = Gtk.Label { label = child.tab_label }
-	elseif Gtk.Widget:is_type_of(child.tab_label) then
+	elseif not Gtk.Widget:is_type_of(child.tab_label) then
 		error("%s: Child label is not a GTK Widget.", self._type.name)
 	end
 	if #child ~= 1 or not Gtk.Widget:is_type_of(child[1]) then
