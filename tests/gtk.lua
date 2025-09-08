@@ -134,3 +134,14 @@ function gtk.notebook_container()
 	check(notebook:get_nth_page(1) == label2)
 	check(notebook:get_nth_page(2) == label3)
 end
+
+function gtk.extra_css_classes()
+	local Gtk = LuaGObject.Gtk
+	local box = Gtk.Box {
+		orientation = "VERTICAL",
+		extra_css_classes = { "linked" },
+	}
+	check(box:has_css_class "linked")
+	-- The .vertical CSS class comes from setting the orientation to vertical. By checking it here, the test ensures that the existing class isn't overwritten by extra_css_classes.
+	check(box:has_css_class "vertical")
+end
