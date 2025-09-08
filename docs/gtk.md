@@ -14,6 +14,27 @@ GTK 4's internals and class hierarchy are quite different from GTK 3, despite ma
 
 LuaGObject adds the `.width` and `.height` pseudo-property to all GTK 4 widgets. When read, these properties return the dimensions of the widget's current allocated space. When written, they set the value of the `width-request` or `height-request` properties which determine a widget's minimum size.
 
+## Adding CSS Classes
+
+GTK Widgets have a built-in property called `css-classes`, which is a list of CSS classes that the widget should use for styling purposes. When assigning to this property, any CSS class that the widget already has is removed. This often leads to odd behaviour, as certain widgets will automatically add their own CSS classes. One such example is `Gtk.Box`; When its `orientation` is set to `VERTICAL`, it gains the `.vertical` CSS class. This means that the given example produces subtly incorrect behaviour:
+
+	local box = Gtk.Box {
+		orientation = "VERTICAL",
+		css_classes = { "linked" },
+	}
+	print(box:has_css_class "vertical") -- prints "false"
+
+LuaGObject provides a pseudo-property called `.extra_css_classes` for this purpose. This attribute can be set either to a string or a table containing any number of strings in the array part, each of which is added as a CSS class. To correct the previous example:
+
+	local box = Gtk.Box {
+		orientation = "VERTICAL",
+		extra_css_classes = { "linked" },
+		-- extra_css_classes = "linked" also works!
+	}
+	print(box:has_css_class "vertical") -- prints "true"
+
+**It is recommended to use this `.extra_css_classes` attribute when initializing widgets,** in order to prevent bad behaviour.
+
 ## Accessing Child Widgets
 
 Any widget's children may be accessed through the `.children` pseudo-property. This returns a table which—when indexed with a number n—returns the n-th child of that widget, or `nil` if there is no n-th child.
