@@ -27,6 +27,7 @@ Gtk.Widget._attribute = {
 	width = { get = Gtk.Widget.get_allocated_width },
 	height = { get = Gtk.Widget.get_allocated_height },
 	children = {},
+	extra_css_classes = {},
 }
 
 -- Allow to query a widget's currently-allocated dimensions by indexing .width or .height, and set the requested dimensions by assigning these pseudo-properties.
@@ -68,6 +69,21 @@ end
 
 function Gtk.Widget._attribute.children:get()
 	return setmetatable({ _widget = self }, widget_children_mt)
+end
+
+function Gtk.Widget._attribute.extra_css_classes:get()
+	error("%s: Cannot read extra_css_classes; attribute is read-only.", self._type.name)
+end
+function Gtk.Widget._attribute.extra_css_classes:set(value)
+	if type(value) == "string" then
+		value = { value }
+	end
+	if type(value) ~= "table" then
+		error("%s: Cannot assign value of type %s to extra_css_classes", self._type.name, type(value))
+	end
+	for _, c in pairs(value) do
+		self:add_css_class(c)
+	end
 end
 
 -- Simple container support --
