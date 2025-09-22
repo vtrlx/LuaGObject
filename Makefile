@@ -6,7 +6,7 @@
 # License: MIT
 #
 
-VERSION = 0.10.1
+VERSION = 0.10.2
 MAKE ?= make
 
 ROCK = luagobject-$(VERSION)-1.rockspec

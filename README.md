@@ -84,6 +84,11 @@ LuaGObject is also built on the work of LGI's developers, listed below in no par
 
 ## History
 
+### 0.10.2 (2025-09-22)
+
+- Adds the `extra_css_classes` attribute to `Gtk.Widget` and all subclasses, allowing extra CSS classes to be added at construct-time without overwriting CSS classes added by a class' implementation.
+- Fixes an issue preventing LuaGObject from working with GLib version 2.86 and later.
+
 ### 0.10.1 (2025-09-04)
 
 - Can now add children directly to many GTK 4 and Adwaita widgets when constructing them
