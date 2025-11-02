@@ -8,6 +8,7 @@ local output_path = 'meta/LuaGObject.lua'
 local namespace_specs = {}
 local primary_namespace
 local skip_dependencies = false
+local compact_spacing = false
 
 local i = 1
 while i <= #args do
@@ -20,6 +21,8 @@ while i <= #args do
       namespace_specs[#namespace_specs + 1] = args[i]
    elseif val == '--skip-deps' then
       skip_dependencies = true
+   elseif val == '--compact' then
+      compact_spacing = true
    else
       namespace_specs[#namespace_specs + 1] = val
    end
@@ -27,7 +30,7 @@ while i <= #args do
 end
 
 if #namespace_specs == 0 then
-   io.stderr:write('usage: ', arg[0], ' [--output <path>] [--skip-deps] <Namespace[-Version]>...\n')
+   io.stderr:write('usage: ', arg[0], ' [--output <path>] [--skip-deps] [--compact] <Namespace[-Version]>...\n')
    os.exit(1)
 end
 
@@ -84,10 +87,6 @@ local function make_namespace_var_name(namespace)
       return namespace
    end
    return sanitize_identifier(namespace, 'ns')
-end
-
-local function make_local_var(namespace, name)
-   return sanitize_identifier(namespace .. '_' .. name, 'sym')
 end
 
 local function format_field_annotation_name(name)
@@ -411,7 +410,24 @@ end
 
 local function format_param_annotation(param)
    if param.optional then
-      return ('---@param %s? %s'):format(param.name, param.type)
+      local type_str = param.type
+      local parts = {}
+      local changed = false
+      for part in type_str:gmatch('[^|]+') do
+         local trimmed = part:gsub('^%s+', ''):gsub('%s+$', '')
+         if trimmed ~= 'nil' then
+            parts[#parts + 1] = trimmed
+         else
+            changed = true
+         end
+      end
+      if changed then
+         type_str = table.concat(parts, '|')
+         if type_str == '' then
+            type_str = 'any'
+         end
+      end
+      return ('---@param %s? %s'):format(param.name, type_str)
    end
    return ('---@param %s %s'):format(param.name, param.type)
 end
@@ -443,12 +459,18 @@ local function collect_annotations(list, transformer)
    return acc
 end
 
-local function emit_methods_for_type(lines, local_name, methods, self_type)
+local function add_blank_line(lines)
+   if not compact_spacing then
+      lines[#lines + 1] = ''
+   end
+end
+
+local function emit_methods_for_type(lines, type_access, methods, self_type)
    if not methods then return end
    for i = 1, #methods do
       local method = methods[i]
       local flags = method.flags or {}
-      local signature, params, returns = build_callable_signature(method)
+      local _, params, returns = build_callable_signature(method)
 
       if flags.is_method and not is_valid_identifier(method.name) then
          local has_self = false
@@ -491,10 +513,10 @@ local function emit_methods_for_type(lines, local_name, methods, self_type)
       end
 
       local header
-      local access = format_table_access(local_name, method.name)
+      local access = format_table_access(type_access, method.name)
       if flags.is_method then
          if is_valid_name then
-            header = ('function %s:%s(%s) end'):format(local_name, method.name, table.concat(arg_names, ', '))
+            header = ('function %s:%s(%s) end'):format(type_access, method.name, table.concat(arg_names, ', '))
          else
             if arg_names[1] ~= 'self' then
                table.insert(arg_names, 1, 'self')
@@ -510,13 +532,13 @@ local function emit_methods_for_type(lines, local_name, methods, self_type)
       end
 
       lines[#lines + 1] = header
-      lines[#lines + 1] = ''
+      add_blank_line(lines)
    end
 end
 
 emit_object = function(lines, ns_name, ns_local, entry)
    local class_name = format_qualified_name(ns_name, entry.name)
-   local local_name = make_local_var(ns_name, entry.name)
+   local type_access = format_table_access(ns_local, entry.name)
    local parent = entry.parent
    if parent then
       local parent_name = format_qualified_name(parent.namespace, parent.name)
@@ -546,21 +568,20 @@ emit_object = function(lines, ns_name, ns_local, entry)
    end
    table.sort(constructors)
    for _, signature in ipairs(constructors) do
-      lines[#lines + 1] = ('---@operator call %s'):format(signature)
+      lines[#lines + 1] = ('---@overload %s'):format(signature)
    end
 
-   lines[#lines + 1] = ('local %s = {}'):format(local_name)
-   lines[#lines + 1] = (format_table_access(ns_local, entry.name) .. ' = ' .. local_name)
-   lines[#lines + 1] = ''
+   lines[#lines + 1] = (type_access .. ' = {}')
+   add_blank_line(lines)
 
-   emit_methods_for_type(lines, local_name, entry.methods, class_name)
+   emit_methods_for_type(lines, type_access, entry.methods, class_name)
 end
 
 emit_interface = emit_object
 
 emit_struct = function(lines, ns_name, ns_local, entry)
    local class_name = format_qualified_name(ns_name, entry.name)
-   local local_name = make_local_var(ns_name, entry.name)
+   local type_access = format_table_access(ns_local, entry.name)
    lines[#lines + 1] = ('---@class %s'):format(class_name)
 
    local field_annotations = collect_annotations(entry.fields, function(field, index)
@@ -577,29 +598,29 @@ emit_struct = function(lines, ns_name, ns_local, entry)
          local method = entry.methods[i]
          local flags = method.flags or {}
          if flags.is_constructor then
-            constructors[#constructors + 1] = build_callable_signature(method)
+            local signature = build_callable_signature(method)
+            constructors[#constructors + 1] = signature
          end
       end
    end
    table.sort(constructors)
    for _, signature in ipairs(constructors) do
-      lines[#lines + 1] = ('---@operator call %s'):format(signature)
+      lines[#lines + 1] = ('---@overload %s'):format(signature)
    end
 
-   lines[#lines + 1] = ('local %s = {}'):format(local_name)
-   lines[#lines + 1] = (format_table_access(ns_local, entry.name) .. ' = ' .. local_name)
-   lines[#lines + 1] = ''
+   lines[#lines + 1] = (type_access .. ' = {}')
+   add_blank_line(lines)
 
-   emit_methods_for_type(lines, local_name, entry.methods, class_name)
+   emit_methods_for_type(lines, type_access, entry.methods, class_name)
 end
 
 emit_union = emit_struct
 
 emit_enum = function(lines, ns_name, ns_local, entry)
    local full_name = format_qualified_name(ns_name, entry.name)
-   local local_name = make_local_var(ns_name, entry.name)
+   local type_access = format_table_access(ns_local, entry.name)
    lines[#lines + 1] = ('---@enum %s'):format(full_name)
-   lines[#lines + 1] = ('local %s = {'):format(local_name)
+   lines[#lines + 1] = (type_access .. ' = {')
    local values = entry.values or {}
    local entries = {}
    for i = 1, #values do
@@ -613,8 +634,7 @@ emit_enum = function(lines, ns_name, ns_local, entry)
       lines[#lines + 1] = ('   %s = %s,'):format(key_repr, item.value)
    end
    lines[#lines + 1] = '}'
-   lines[#lines + 1] = (format_table_access(ns_local, entry.name) .. ' = ' .. local_name)
-   lines[#lines + 1] = ''
+   add_blank_line(lines)
 end
 
 emit_flags = emit_enum
@@ -625,7 +645,7 @@ emit_callback = function(lines, ns_name, ns_local, entry)
    lines[#lines + 1] = ('---@alias %s %s'):format(full_name, signature)
    lines[#lines + 1] = ('---@type %s'):format(full_name)
    lines[#lines + 1] = (format_table_access(ns_local, entry.name) .. ' = nil')
-   lines[#lines + 1] = ''
+   add_blank_line(lines)
 end
 
 emit_function = function(lines, ns_name, ns_local, entry)
@@ -641,8 +661,13 @@ emit_function = function(lines, ns_name, ns_local, entry)
    for _, param in ipairs(params) do
       arg_names[#arg_names + 1] = param.name
    end
-   lines[#lines + 1] = ('function %s(%s) end'):format(format_table_access(ns_local, entry.name), table.concat(arg_names, ', '))
-   lines[#lines + 1] = ''
+   local access = format_table_access(ns_local, entry.name)
+   if is_valid_identifier(entry.name) then
+      lines[#lines + 1] = ('function %s(%s) end'):format(access, table.concat(arg_names, ', '))
+   else
+      lines[#lines + 1] = ('%s = function(%s) end'):format(access, table.concat(arg_names, ', '))
+   end
+   add_blank_line(lines)
 end
 
 emit_constant = function(lines, ns_name, ns_local, entry)
@@ -651,7 +676,7 @@ emit_constant = function(lines, ns_name, ns_local, entry)
       lines[#lines + 1] = ('---@type %s'):format(const_type)
    end
    lines[#lines + 1] = (format_table_access(ns_local, entry.name) .. ' = nil')
-   lines[#lines + 1] = ''
+   add_blank_line(lines)
 end
 
 if os.getenv('LUA_GOBJECT_META_DEBUG') then
@@ -810,7 +835,7 @@ end
 local lines = {}
 
 lines[#lines + 1] = '---@meta'
-lines[#lines + 1] = ''
+add_blank_line(lines)
 
 for _, ns_name in ipairs(process_order) do
    local data = namespace_data[ns_name]
@@ -827,7 +852,7 @@ for _, ns_name in ipairs(process_order) do
       lines[#lines + 1] = ('---@field %s %s'):format(format_field_annotation_name(field), type_str)
    end
    lines[#lines + 1] = ('local %s = {}'):format(ns_local)
-   lines[#lines + 1] = ''
+   add_blank_line(lines)
 
    for _, entry in ipairs(data.objects) do
       emit_object(lines, ns_name, ns_local, entry)
@@ -857,7 +882,7 @@ for _, ns_name in ipairs(process_order) do
       emit_constant(lines, ns_name, ns_local, entry)
    end
 
-   lines[#lines + 1] = ''
+   add_blank_line(lines)
 end
 
 local primary_var = primary_namespace and namespace_vars[primary_namespace]
