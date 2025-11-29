@@ -12,16 +12,24 @@ This project is forked from [LGI](http://github.com/lgi-devs/lgi) and shares man
 
 In order to be able to compile the native part of LuaGObject, GIRepository-2 >= 2.80.0 development package must be installed. The development package is called `libgirepository-2.0-dev` on Debian-based systems (Debian, Ubuntu, Mint, etc) and `glib2-devel` on RedHat-based systems (RHEL, Fedora, etc).
 
+### Using LuaRocks
+
+The recommended way to install LuaGObject is [through LuaRocks](https://luarocks.org/modules/vtrlx/luagobject).
+
+	[sudo] luarocks install luagobject
+
+By default, this will install LuaGObject for Lua 5.1. To install for other versions of Lua, invoke the appropriate LuaRocks command (`luarocks-5.3 install luagobject` to install LuaGObject for Lua 5.3, etc for other Lua versions).
+
 ### Using GNU Make
 
-Building LuaGObject using GNU Make is relatively straightforward:
+Building LuaGObject using GNU Make is straightforward:
 
 	make
 	[sudo] make install [PREFIX=<prefix>] [DESTDIR=<destdir>]
 
 Please note that on BSD-systems you may need to use the 'gmake' command.
 
-By default, building with GNU Make does not support using pkg-config to detect a system-installed Lua. For installing a development version of GObject with GNU Make, it is recommended to install PUC-Rio Lua [from source](https://www.lua.org/download.html).
+By default, building with GNU Make does not support using pkg-config to detect a system-installed Lua. For installing a development version of LuaGObject with GNU Make, it is recommended to install PUC-Rio Lua [from source](https://www.lua.org/download.html).
 
 ### Using Meson
 
@@ -37,11 +45,11 @@ Building LuaGObject with Visual Studio 2013 and later is also supported via Meso
 
 ## Usage
 
-Documentation for LuaGObject is available in the `doc/` folder, formatted using Markdown. To read the documentation using HTML, process the docs using your preferred Markdown processor.
+Documentation for LuaGObject is available in the `docs/` folder.
 
-For developing a modern GNOME app, it is recommended to use Flatpak to ensure stability of dynamically generated bindings. See [Tally](https://github.com/vtrlx/tally) and [Parchment](https://github.com/vtrlx/parchment) for examples of complete applications developed using LuaGObject.
+For developing a modern GNOME app, it is recommended to use Flatpak to ensure stability of the dynamically generated bindings. See [Tally](https://github.com/vtrlx/tally) and [Parchment](https://github.com/vtrlx/parchment) for examples of complete applications developed using LuaGObject.
 
-Older LGI-era examples are in the `samples/` directory. Please note that certain examples—especially for Gtk—are quite dated and may no longer be accurate.
+Older LGI-era examples are in the `samples/` directory. Please note that certain examples—especially for GTK—are quite dated and may no longer be accurate.
 
 ### Migrating from LGI
 
@@ -86,8 +94,8 @@ LuaGObject is also built on the work of LGI's developers, listed below in no par
 
 ### 0.10.2 (2025-09-22)
 
-- Adds the `extra_css_classes` attribute to `Gtk.Widget` and all subclasses, allowing extra CSS classes to be added at construct-time without overwriting CSS classes added by a class' implementation.
-- Fixes an issue preventing LuaGObject from working with GLib version 2.86 and later.
+- Adds the `extra_css_classes` attribute to `Gtk.Widget` and all subclasses, allowing extra CSS classes to be added at construct-time without overwriting CSS classes added by a class' implementation
+- Fixes an issue preventing LuaGObject from working with GLib version 2.86 and later
 
 ### 0.10.1 (2025-09-04)
 
