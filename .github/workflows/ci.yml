@@ -20,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        version: [5.1.5, 5.2.4, 5.3.6, 5.4.7, 5.5.0-beta]
+        version: [5.1.5, 5.2.4, 5.3.6, 5.4.8, 5.5.0]
 
     env:
       LUA_VERSION: ${{ matrix.version }}
@@ -31,7 +31,7 @@ jobs:
       - name: Build PUC-Rio Lua ${{ matrix.version }}
         run: |
           # wget from /work/ is temporary until Lua 5.5 releases
-          wget "https://www.lua.org/ftp/lua-${LUA_VERSION}.tar.gz" || wget "https://www.lua.org/work/lua-${LUA_VERSION}.tar.gz"
+          wget "https://www.lua.org/ftp/lua-${LUA_VERSION}.tar.gz"
           tar xzvf "lua-${LUA_VERSION}.tar.gz"
           cd "lua-${LUA_VERSION}"
           make linux SYSLIBS="-Wl,-E -ldl -lreadline" SYSCFLAGS="-DLUA_USE_LINUX -DLUA_USE_APICHECK" CC='gcc -g'
