@@ -10,15 +10,15 @@ This project is forked from [LGI](http://github.com/lgi-devs/lgi) and shares man
 
 ## Installation
 
-In order to be able to compile the native part of LuaGObject, GIRepository-2 >= 2.80.0 development package must be installed. The development package is called `libgirepository-2.0-dev` on Debian-based systems (Debian, Ubuntu, Mint, etc) and `glib2-devel` on RedHat-based systems (RHEL, Fedora, etc).
-
-### Using LuaRocks
-
 The recommended way to install LuaGObject is [through LuaRocks](https://luarocks.org/modules/vtrlx/luagobject).
 
 	[sudo] luarocks install luagobject
 
 By default, this will install LuaGObject for Lua 5.1. To install for other versions of Lua, invoke the appropriate LuaRocks command (`luarocks-5.3 install luagobject` to install LuaGObject for Lua 5.3, etc for other Lua versions).
+
+## Building
+
+In order to be able to compile the native part of LuaGObject, GIRepository-2 >= 2.80.0 development package must be installed. The development package is called `libgirepository-2.0-dev` on Debian-based systems (Debian, Ubuntu, Mint, etc) and `glib2-devel` on RedHat-based systems (RHEL, Fedora, etc).
 
 ### Using GNU Make
 
