@@ -21,6 +21,9 @@ static lua_Number
 check_integer(lua_State *L, int narg, lua_Number val_min, lua_Number val_max)
 {
 	lua_Number val = luaL_checknumber(L, narg);
+	/* If the value is negative and the target type is unsigned, return it so it underflows. */
+	if (val_min == 0 && val < 0)
+		return val;
 	if (val < val_min || val > val_max) {
 		lua_pushfstring(L, "%f is out of <%f, %f>", val, val_min, val_max);
 		luaL_argerror(L, narg, lua_tostring(L, -1));
@@ -32,6 +35,9 @@ static lua_Integer
 check_integer(lua_State *L, int narg, lua_Integer val_min, lua_Integer val_max)
 {
 	lua_Integer val = luaL_checkint(L, narg);
+	/* If the value is negative and the target type is unsigned, return it so it underflows. */
+	if (val_min == 0 && val < 0)
+		return val;
 	if (val < val_min || val > val_max) {
 		lua_pushfstring(L, "%I is out of <%I, %I>", val, val_min, val_max);
 		luaL_argerror(L, narg, lua_tostring(L, -1));
