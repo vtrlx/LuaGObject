@@ -92,6 +92,10 @@ LuaGObject is also built on the work of LGI's developers, listed below in no par
 
 ## History
 
+### 0.10.3 (2025-12-29)
+
+- When used in contexts where an unsigned integer is expected, negative numbers now underflow into the expected numeric range instead of generating an error (see issue #14)
+
 ### 0.10.2 (2025-09-22)
 
 - Adds the `extra_css_classes` attribute to `Gtk.Widget` and all subclasses, allowing extra CSS classes to be added at construct-time without overwriting CSS classes added by a class' implementation

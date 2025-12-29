@@ -2,33 +2,33 @@ package = 'LuaGObject'
 version = '%VERSION%-1'
 
 description = {
-    summary = "Use GObject libraries from Lua",
-    detailed = [[
-        Dynamically bind to any GObject-based library which supports
-        GObject-Introspection—such as Gtk, Adwaita, Glib, and more—allowing the
-        use of these libraries directly from Lua.
-    ]],
-    license = 'MIT/X11',
-    homepage = 'https://github.com/vtrlx/LuaGObject'
+	summary = "Use GObject libraries from Lua",
+	detailed = [[
+		Dynamically bind to any GObject-based library which supports
+		GObject-Introspection—such as Gtk, Adwaita, Glib, and more—allowing the
+		use of these libraries directly from Lua.
+	]],
+	license = 'MIT/X11',
+	homepage = 'https://github.com/vtrlx/LuaGObject'
 }
 
 supported_platforms = { 'unix', 'mingw' }
 
 source = {
-    url = 'git://github.com/vtrlx/LuaGObject.git',
-    tag = '%VERSION%'
+	url = 'git://github.com/vtrlx/LuaGObject.git',
+	tag = '%VERSION%'
 }
 
 dependencies = { 'lua >= 5.1' }
 
 build = {
-    type = 'make',
-    variables = {
-        PREFIX = '$(PREFIX)',
-        LUA_LIBDIR = '$(LIBDIR)',
-        LUA_SHAREDIR = '$(LUADIR)',
-        LUA_CFLAGS = '$(CFLAGS) -I$(LUA_INCDIR)',
-        LIBFLAG = '$(LIBFLAG)',
-    },
-    copy_directories = { 'docs', 'samples' }
+	type = 'make',
+	variables = {
+		PREFIX = '$(PREFIX)',
+		LUA_LIBDIR = '$(LIBDIR)',
+		LUA_SHAREDIR = '$(LUADIR)',
+		LUA_CFLAGS = '$(CFLAGS) -I$(LUA_INCDIR)',
+		LIBFLAG = '$(LIBFLAG)',
+	},
+	copy_directories = { 'docs', 'samples' }
 }

@@ -1,12 +1,8 @@
-#
-# LuaGObject: Dynamic binding to GObject-based libraries using
-# GObject-Introspection.
-#
+# LuaGObject: Dynamic binding to GObject-based libraries using GObject-Introspection.
 # Author: Pavel Holejsovsky <pavel.holejsovsky@gmail.com>
 # License: MIT
-#
 
-VERSION = 0.10.2
+VERSION = 0.10.3
 MAKE ?= make
 
 ROCK = luagobject-$(VERSION)-1.rockspec
