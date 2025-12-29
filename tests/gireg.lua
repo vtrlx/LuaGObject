@@ -56,9 +56,10 @@ function gireg.type_uint8()
 	if not nativeIntegers then
 		checkv(R.test_uint8(1.1), 1, 'number')
 	end
+	checkv(R.test_uint8(-1), 0xff, 'number')
+	checkv(R.test_uint8(-2), 0xfe, 'number')
 	checkv(R.test_uint8(0xff), 0xff, 'number')
 	check(not pcall(R.test_uint8, 0x100))
-	check(not pcall(R.test_uint8, -1))
 	check(not pcall(R.test_uint8))
 	check(not pcall(R.test_uint8, nil))
 	check(not pcall(R.test_uint8, 'string'))
@@ -95,9 +96,10 @@ function gireg.type_uint16()
 	if not nativeIntegers then
 		checkv(R.test_uint16(1.1), 1, 'number')
 	end
+	checkv(R.test_uint16(-1), 0xffff, 'number')
+	checkv(R.test_uint16(-3), 0xfffd, 'number')
 	checkv(R.test_uint16(0xffff), 0xffff, 'number')
 	check(not pcall(R.test_uint16, 0x10000))
-	check(not pcall(R.test_uint16, -1))
 	check(not pcall(R.test_uint16))
 	check(not pcall(R.test_uint16, nil))
 	check(not pcall(R.test_uint16, 'string'))
@@ -134,9 +136,10 @@ function gireg.type_uint32()
 	if not nativeIntegers then
 		checkv(R.test_uint32(1.1), 1, 'number')
 	end
+	checkv(R.test_uint32(-1), 0xffffffff, 'number')
+	checkv(R.test_uint32(-4), 0xfffffffc, 'number')
 	checkv(R.test_uint32(0xffffffff), 0xffffffff, 'number')
 	check(not pcall(R.test_uint32, 0x100000000))
-	check(not pcall(R.test_uint32, -1))
 	check(not pcall(R.test_uint32))
 	check(not pcall(R.test_uint32, nil))
 	check(not pcall(R.test_uint32, 'string'))
@@ -181,7 +184,10 @@ function gireg.type_uint64()
 	if not nativeIntegers then
 		checkv(R.test_uint64(1.1), 1, 'number')
 	end
-	check(not pcall(R.test_uint64, -1))
+	if nativeIntegers then
+		checkv(R.test_uint64(-1), 0xffffffffffffffff, 'number')
+		checkv(R.test_uint64(-5), 0xfffffffffffffffb, 'number')
+	end
 	check(not pcall(R.test_uint64))
 	check(not pcall(R.test_uint64, nil))
 	check(not pcall(R.test_uint64, 'string'))
@@ -189,8 +195,11 @@ function gireg.type_uint64()
 	check(not pcall(R.test_uint64, {}))
 	check(not pcall(R.test_uint64, function() end))
 
+	-- With integer underflows, this actually works.
+	if nativeIntegers then
+		checkv(R.test_uint64(0xffffffffffffffff), 0xffffffffffffffff, 'number')
+	end
 	-- See comment above about lossy conversions.
-	--checkv(R.test_uint64(0xffffffffffffffff), 0xffffffffffffffff, 'number')
 	--check(not pcall(R.test_uint64, 0x10000000000000000))
 end
 
@@ -212,7 +221,6 @@ function gireg.type_ushort()
 	if not nativeIntegers then
 		checkv(R.test_ushort(1.1), 1, 'number')
 	end
-	check(not pcall(R.test_ushort, -1))
 end
 
 function gireg.type_int()
@@ -233,7 +241,6 @@ function gireg.type_uint()
 	if not nativeIntegers then
 		checkv(R.test_uint(1.1), 1, 'number')
 	end
-	check(not pcall(R.test_uint, -1))
 end
 
 function gireg.type_ssize()
@@ -254,11 +261,9 @@ function gireg.type_size()
 	if not nativeIntegers then
 		checkv(R.test_size(1.1), 1, 'number')
 	end
-	check(not pcall(R.test_size, -1))
 end
 
--- Helper, checks that given value has requested type and value, with some
--- tolerance because of low precision of gfloat type.
+-- Helper, checks that given value has requested type and value, with some tolerance because of low precision of gfloat type.
 local function checkvf(val, exp, tolerance)
 	check(type(val) == 'number',
 		string.format("got type `%s', expected `number'", type(val)), 2)
