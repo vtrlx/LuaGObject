@@ -57,6 +57,7 @@ function gireg.type_uint8()
 		checkv(R.test_uint8(1.1), 1, 'number')
 	end
 	checkv(R.test_uint8(-1), 0xff, 'number')
+	checkv(R.test_uint8(-2), 0xfe, 'number')
 	checkv(R.test_uint8(0xff), 0xff, 'number')
 	check(not pcall(R.test_uint8, 0x100))
 	check(not pcall(R.test_uint8))
@@ -96,6 +97,7 @@ function gireg.type_uint16()
 		checkv(R.test_uint16(1.1), 1, 'number')
 	end
 	checkv(R.test_uint16(-1), 0xffff, 'number')
+	checkv(R.test_uint16(-3), 0xfffd, 'number')
 	checkv(R.test_uint16(0xffff), 0xffff, 'number')
 	check(not pcall(R.test_uint16, 0x10000))
 	check(not pcall(R.test_uint16))
@@ -135,6 +137,7 @@ function gireg.type_uint32()
 		checkv(R.test_uint32(1.1), 1, 'number')
 	end
 	checkv(R.test_uint32(-1), 0xffffffff, 'number')
+	checkv(R.test_uint32(-4), 0xfffffffc, 'number')
 	checkv(R.test_uint32(0xffffffff), 0xffffffff, 'number')
 	check(not pcall(R.test_uint32, 0x100000000))
 	check(not pcall(R.test_uint32))
@@ -183,6 +186,7 @@ function gireg.type_uint64()
 	end
 	if nativeIntegers then
 		checkv(R.test_uint64(-1), 0xffffffffffffffff, 'number')
+		checkv(R.test_uint64(-5), 0xfffffffffffffffb, 'number')
 	end
 	check(not pcall(R.test_uint64))
 	check(not pcall(R.test_uint64, nil))
