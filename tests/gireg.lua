@@ -195,7 +195,10 @@ function gireg.type_uint64()
 	check(not pcall(R.test_uint64, {}))
 	check(not pcall(R.test_uint64, function() end))
 
-	checkv(R.test_uint64(0xffffffffffffffff), 0xffffffffffffffff, 'number')
+	-- With integer underflows, this actually works.
+	if nativeIntegers then
+		checkv(R.test_uint64(0xffffffffffffffff), 0xffffffffffffffff, 'number')
+	end
 	-- See comment above about lossy conversions.
 	--check(not pcall(R.test_uint64, 0x10000000000000000))
 end
