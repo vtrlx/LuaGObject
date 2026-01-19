@@ -93,7 +93,7 @@ infos_index(lua_State *L)
 		for (n = 0; n < infos->count; n++) {
 			GIBaseInfo *info = infos->item_get(infos->info, n);
 			if (strcmp(gi_base_info_get_name(info), name) == 0)
-			return lua_gobject_gi_info_new(L, info);
+				return lua_gobject_gi_info_new(L, info);
 
 			gi_base_info_unref(info);
 		}

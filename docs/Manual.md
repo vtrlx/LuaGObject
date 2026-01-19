@@ -173,6 +173,17 @@ Both forms of signal connection will connect the handler to be called before the
 	end
 	window.on_notify:connect(notify_handler, "is-active", false)
 
+Certain libraries do not export complete typelibs. As a consequence, some signals become unintrospectable and these conveniences become unavailable. In cases where LuaGObject fails to discover a signal, a method named `:connect_signal()` is provided to connect manually using only GObject machinery. For instance, to connect to the `::about-to-finish` signal on GStreamer's unintrospectable PlayBin3,
+
+	local player = Gst.ElementFactory.make("playbin3", "player)
+	player:connect_signal("about-to-finish", function()
+		-- Play next_track seamlessly.
+		player:set_property("uri", next_track)
+		player:set_state "PLAYING"
+	end)
+
+The `:connect_signal()` method also optionally takes a `detail` as a third argument for signals which support them (similarly to `::on_notify`), and a fourth argument `after` which if true will execute the given handler function after other signal handlers.
+
 #### 3.4.2 Emitting Signals
 
 Emitting an existing signal is usually only necessary in the implementation of a subclass. The simplest method to do so is to "call" the signal on the object instance as if it where a function. For instance, for an object `window` which subclasses `Gtk.Window`, to emit the parent class' `destroy` signal one can write:
