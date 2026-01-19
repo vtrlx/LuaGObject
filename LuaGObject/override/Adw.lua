@@ -169,7 +169,7 @@ if Adw.ToolbarView then
 		if type(value) ~= "table" then
 			error("%s: Can only write table or Gtk.Widget to add_bottom_bars.", self._type.name)
 		end
-		for _, v in ipairs(values) do
+		for _, v in ipairs(value) do
 			self:add_bottom_bar(v)
 		end
 	end

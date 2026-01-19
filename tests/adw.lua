@@ -105,3 +105,14 @@ function adw.headerbar_childattrs()
 		end_packs = Gtk.Button.new_with_label "end button",
 	}
 end
+
+function adw.toolbarview_childattrs()
+	local Adw, Gtk = LuaGObject.Adw, LuaGObject.Gtk
+	if Adw.ToolbarView then
+		local toolbarview = Adw.ToolbarView {
+			-- If this doesn't crash, then it's assumed the override is working.
+			top_bars = Adw.HeaderBar(),
+			bottom_bars = Adw.HeaderBar(),
+		}
+	end
+end
