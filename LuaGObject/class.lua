@@ -360,8 +360,7 @@ function class.class_mt:derive(typename, ifaces)
 			iface_addr = core.record.query(iface_addr, "addr") or iface_addr
 			local iface_struct = core.record.new(iface._class, iface_addr)
 
-			-- Iterate through all interface overrides and assign to the
-			-- virtual callbacks.
+			-- Iterate through all interface overrides and assign to the virtual callbacks.
 			for name, addr in pairs(override) do
 				iface_struct[name] = addr
 			end
@@ -382,8 +381,7 @@ end
 
 class.derived_mt = class.class_mt:clone('derived', {})
 
--- Support for 'priv' pseudomember, holding table with user
--- implementation data.
+-- Support for 'priv' pseudomember, holding table with user implementation data.
 function class.derived_mt:_element(instance, symbol)
 	-- Special handling of 'priv' attribute.
 	if instance and symbol == 'priv' then return symbol, '_priv' end
