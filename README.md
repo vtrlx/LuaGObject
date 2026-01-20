@@ -92,9 +92,9 @@ LuaGObject is also built on the work of LGI's developers, listed below in no par
 
 ## History
 
-### 0.10.4 (upcoming)
+### 0.10.4 (2026-01-20)
 
-- Adds a new method :connect_signal to all GObject instances which uses GObject's internal mechanisms to connect to a signal, including those which aren't introspectable
+- Adds a new method :connect_signal to all GObject instances which uses GObject's internal mechanisms to connect to a signal, including those which LuaGObject fails to detect through introspection
 - Fixes Adw.ToolbarView's .bottom_bars pseudo-property
 
 ### 0.10.3 (2025-12-29)
