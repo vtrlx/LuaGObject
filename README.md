@@ -92,6 +92,11 @@ LuaGObject is also built on the work of LGI's developers, listed below in no par
 
 ## History
 
+### 0.10.4 (upcoming)
+
+- Adds a new method :connect_signal to all GObject instances which uses GObject's internal mechanisms to connect to a signal, including those which aren't introspectable
+- Fixes Adw.ToolbarView's .bottom_bars pseudo-property
+
 ### 0.10.3 (2025-12-29)
 
 - When used in contexts where an unsigned integer is expected, negative numbers now underflow into the expected numeric range instead of generating an error (see issue #14)

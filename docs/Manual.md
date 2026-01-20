@@ -184,11 +184,15 @@ Certain libraries do not export complete typelibs. As a consequence, some signal
 
 The `:connect_signal()` method also optionally takes a `detail` as a third argument for signals which support them (similarly to `::on_notify`), and a fourth argument `after` which if true will execute the given handler function after other signal handlers.
 
+The `:connect_signal()` method returns a signal handler ID. This ID can be passed into the `:signal_handler_disconnect()` method to disconnect the given signal manually, prior to garbage collection.
+
 #### 3.4.2 Emitting Signals
 
 Emitting an existing signal is usually only necessary in the implementation of a subclass. The simplest method to do so is to "call" the signal on the object instance as if it where a function. For instance, for an object `window` which subclasses `Gtk.Window`, to emit the parent class' `destroy` signal one can write:
 
 	window:on_destroy()
+
+Note that if a signal is not introspectable, it cannot be manually emitted from Lua code.
 
 ### 3.5. Dynamic Typing of GObjects
 
