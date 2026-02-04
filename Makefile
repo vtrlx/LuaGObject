@@ -2,7 +2,7 @@
 # Author: Pavel Holejsovsky <pavel.holejsovsky@gmail.com>
 # License: MIT
 
-VERSION = 0.10.4
+VERSION = 0.10.5
 MAKE ?= make
 
 ROCK = luagobject-$(VERSION)-1.rockspec

@@ -92,6 +92,10 @@ LuaGObject is also built on the work of LGI's developers, listed below in no par
 
 ## History
 
+### 0.10.5 (2026-02-04)
+
+- Fixes an issue preventing LuaGObject from working with GLib version 2.87 and later
+
 ### 0.10.4 (2026-01-20)
 
 - Adds a new method :connect_signal to all GObject instances which uses GObject's internal mechanisms to connect to a signal, including those which LuaGObject fails to detect through introspection
