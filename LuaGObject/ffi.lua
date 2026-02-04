@@ -86,9 +86,15 @@ function ffi.load_enum(gtype, name)
 	end
 	local enum_class = core.record.cast(
 		type_class, is_flags and GObject.FlagsClass or GObject.EnumClass)
-	for i = 0, enum_class.n_values - 1 do
-		local val = core.record.fromarray(enum_class.values, i)
-		enum_component[core.upcase(val.value_nick):gsub('%-', '_')] = val.value
+	if GLib.check_version(2, 87, 0) then
+		for i = 0, enum_class.n_values - 1 do
+			local val = core.record.fromarray(enum_class.values, i)
+			enum_component[core.upcase(val.value_nick):gsub('%-', '_')] = val.value
+		end
+	else
+		for _, val in ipairs(enum_class.values) do
+			enum_component[core.upcase(val.value_nick):gsub('%-', '_')] = val.value
+		end
 	end
 	-- For GLib versions below 2.86, type_class was ref'd and needs to be unref'd
 	if GLib.check_version(2, 86, 0) then
