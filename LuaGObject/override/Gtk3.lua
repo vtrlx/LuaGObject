@@ -21,10 +21,12 @@ local log = LuaGObject.log.domain('LuaGObject.Gtk3')
 
 assert(Gtk.get_major_version() <= 3)
 
--- Initialize GTK.
-Gtk.disable_setlocale()
-if not Gtk.init_check() then
-   return "gtk_init_check() failed"
+-- Initialize GTK, unless a host application already did so.
+if not Gdk.Display.get_default() then
+   Gtk.disable_setlocale()
+   if not Gtk.init_check() then
+      return "gtk_init_check() failed"
+   end
 end
 
 -- Gtk.Allocation is just an alias to Gdk.Rectangle.
