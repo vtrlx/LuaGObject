@@ -221,7 +221,7 @@ Certain Adw classes have multiple different kinds of child widgets, preventing t
 - `Adw.HeaderBar`
 	- `.start_packs` for widgets to be added through `:pack_start()`
 	- `.end_packs` for widgets to be added through `:pack_end()`
-- `Adw.ActionRow`
+- `Adw.ActionRow` and `Adw.ExpanderRow`
 	- `.prefixes` for widgets to be added through `:add_prefix()`
 	- `.suffixes` for widgets to be added through `:add_suffix()`
 - `Adw.ToolbarView` (Adw 1.4 and later)

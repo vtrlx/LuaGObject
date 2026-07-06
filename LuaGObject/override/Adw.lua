@@ -113,6 +113,43 @@ function Adw.ActionRow._attribute.suffixes:set(value)
 	end
 end
 
+-- Adw.ExpanderRow overrides --
+
+Adw.ExpanderRow._attribute = {
+	prefixes = {},
+	suffixes = {},
+}
+
+function Adw.ExpanderRow._attribute.prefixes:get()
+	error("%s: Cannot read prefixes; attribute is write-only.", self._type.name)
+end
+function Adw.ExpanderRow._attribute.prefixes:set(value)
+	if Gtk.Widget:is_type_of(value) then
+		value = { value }
+	end
+	if type(value) ~= "table" then
+		error("%s: Can only write table or Gtk.Widget to add_prefixes.", self._type.name)
+	end
+	for _, c in ipairs(value) do
+		self:add_prefix(c)
+	end
+end
+
+function Adw.ExpanderRow._attribute.suffixes:get()
+	error("%s: Cannot read suffixes; attribute is write-only.", self._type.name)
+end
+function Adw.ExpanderRow._attribute.suffixes:set(value)
+	if Gtk.Widget:is_type_of(value) then
+		value = { value }
+	end
+	if type(value) ~= "table" then
+		error("%s: Can only write table or Widget to add_suffixes.", self._type.name)
+	end
+	for _, v in ipairs(value) do
+		self:add_suffix(v)
+	end
+end
+
 -- Adw.HeaderBar overrides --
 
 Adw.HeaderBar._attribute = {
