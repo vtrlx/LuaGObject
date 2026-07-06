@@ -1,9 +1,7 @@
-/*
-Dynamic Lua binding to GObject using dynamic gobject-introspection.
+/* Dynamic Lua binding to GObject using dynamic gobject-introspection.
 Copyright(c) 2010, 2011, 2012, 2013 Pavel Holejsovsky
 Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
-Core C utility API.
-*/
+Core C utility API. */
 
 #include <string.h>
 #include "lua_gobject.h"

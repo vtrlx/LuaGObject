@@ -12,10 +12,10 @@ assert(Gtk.get_major_version() == 4)
 
 -- Initialize GTK, unless a host application already did so.
 if not Gdk.Display.get_default() then
-    Gtk.disable_setlocale()
-    if not Gtk.init_check() then
-        return "gtk_init_check() failed"
-    end
+	Gtk.disable_setlocale()
+	if not Gtk.init_check() then
+		return "gtk_init_check() failed"
+	end
 end
 
 -- Gtk.Allocation overrides --

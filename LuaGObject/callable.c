@@ -598,7 +598,7 @@ callable_gc(lua_State *L)
 	/* Unref embedded 'info' field. */
 	Callable *callable = callable_get(L, 1);
 	if (callable->info)
-	gi_base_info_unref(callable->info);
+		gi_base_info_unref(callable->info);
 
 	/* Destroy all params. */
 	for (i = 0; i < callable->nargs; i++)

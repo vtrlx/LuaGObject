@@ -202,8 +202,7 @@ object_unref(lua_State *L, gpointer obj)
 		return;
 	}
 
-	/* Some other fundamental type, check, whether it has registered
-	custom unref method. */
+	/* Some other fundamental type, check, whether it has registered custom unref method. */
 	GIObjectInfo *info = GI_OBJECT_INFO(gi_repository_find_by_gtype(
 		lua_gobject_gi_get_repository(), gtype));
 	if (info == NULL)
