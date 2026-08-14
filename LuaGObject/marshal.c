@@ -1373,11 +1373,10 @@ lua_gobject_marshal_field(lua_State *L, gpointer object, gboolean getmode,
 		}
 	}
 
-	GICallableInfo *ci = GI_IS_CALLABLE_INFO(pi)
-		? GI_CALLABLE_INFO(pi) : NULL;
 	if (getmode) {
 		lua_gobject_marshal_2lua(L, ti, NULL, GI_DIRECTION_OUT,
-			GI_TRANSFER_NOTHING, field_addr, parent_arg, ci, object);
+			GI_TRANSFER_NOTHING, field_addr, parent_arg,
+			GI_CALLABLE_INFO(pi), object);
 		nret = 1;
 	} else {
 		lua_gobject_marshal_2c(L, ti, NULL, GI_TRANSFER_EVERYTHING,
