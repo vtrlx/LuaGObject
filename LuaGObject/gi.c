@@ -657,6 +657,24 @@ static const luaL_Reg gi_namespace_reg[] = {
 	{ NULL, NULL }
 };
 
+/* Lua API: core.gi.prepend_library_path(path) */
+static int
+gi_prepend_library_path(lua_State *L)
+{
+	const gchar *path = luaL_checkstring(L, 1);
+	gi_repository_prepend_library_path(lua_gobject_gi_get_repository(), path);
+	return 0;
+}
+
+/* Lua API: core.gi.prepend_search_path(path) */
+static int
+gi_prepend_search_path(lua_State *L)
+{
+	const gchar *path = luaL_checkstring(L, 1);
+	gi_repository_prepend_search_path(lua_gobject_gi_get_repository(), path);
+	return 0;
+}
+
 /* Lua API: core.gi.require(namespace[, version[, typelib_dir]]) */
 static int
 gi_require(lua_State *L)
@@ -734,6 +752,8 @@ static const Reg gi_reg[] = {
 };
 
 static const luaL_Reg gi_api_reg[] = {
+	{ "prepend_library_path", gi_prepend_library_path },
+	{ "prepend_search_path", gi_prepend_search_path },
 	{ "require", gi_require },
 	{ "isinfo", gi_isinfo },
 	{ NULL, NULL }
