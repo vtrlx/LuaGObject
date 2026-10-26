@@ -9,10 +9,10 @@ local core = require 'LuaGObject.core'
 local log = {}
 
 -- Creates table containing methods 'message', 'warning', 'critical', 'error',
--- 'debug' methods which log to specified domain.
+-- 'debug', 'info' methods which log to specified domain.
 function log.domain(name)
 	local domain = log[name] or {}
-	for _, level in ipairs { 'message', 'warning', 'critical', 'error', 'debug' } do
+	for _, level in ipairs { 'message', 'warning', 'critical', 'error', 'debug', 'info' } do
 		if not domain[level] then
 			domain[level] =
 				function(format, ...)
