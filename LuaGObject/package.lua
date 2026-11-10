@@ -30,7 +30,7 @@ function package.ensure(name, version)
 		ns = setmetatable({ _name = name, _version = version }, package.mt)
 		core.repo[name] = ns
 	else
-		if version and ns._version and version ~= nv._version then
+		if version and ns._version and version ~= ns._version then
 			error(("%s-%s: required version %s "):format(
 				ns._name, ns._version, version))
 		end
