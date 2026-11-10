@@ -551,7 +551,7 @@ function Gtk.Assistant:add(child)
          end
       end
    else
-      self:append_page(widget)
+      self:append_page(child)
    end
 end
 Gtk.Assistant._container_add = Gtk.Assistant.add
